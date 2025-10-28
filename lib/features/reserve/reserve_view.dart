@@ -39,7 +39,7 @@ class ReserveView extends GetView<ReserveController> {
                 title: controller.ticketTitle.value,
                 description: controller.ticketDesc.value,
                 date: controller.ticketDate.value,
-                imageUrl: controller.ticketImage.value,
+                imageUrl: controller.ticketImage.value, location: '',
               )),
             ],
           ),

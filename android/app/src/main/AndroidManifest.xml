@@ -1,4 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <queries>
+
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="metamask" android:host = "com.example.nft_ticket_event_ui" />
+        </intent>
+    </queries> 
     <application
         android:label="nft_ticket_event_ui"
         android:name="${applicationName}"
