@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:nft_ticket_event_ui/features/login/bloc/metamask_auth_bloc.dart';
 import 'package:nft_ticket_event_ui/features/login/bloc/wallet_envet.dart';
 import 'package:nft_ticket_event_ui/features/login/bloc/wallet_state.dart';
-import 'package:nft_ticket_event_ui/features/login/widget/nsalert_dialog.dart';
-import 'package:nft_ticket_event_ui/features/login/widget/other_custom_widgets.dart';
-import 'package:nft_ticket_event_ui/features/login/widget/show_snack_bar.dart';
+import 'package:nft_ticket_event_ui/features/login/widgets/nsalert_dialog.dart';
+import 'package:nft_ticket_event_ui/features/login/widgets/other_custom_widgets.dart';
+import 'package:nft_ticket_event_ui/features/login/widgets/show_snack_bar.dart';
 import 'package:nft_ticket_event_ui/utils/constants/app_constants.dart';
 import 'package:nft_ticket_event_ui/utils/constants/assets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MetaMaskLoginScreen extends StatefulWidget {
   const MetaMaskLoginScreen({super.key});
@@ -23,7 +25,7 @@ class _MetaMaskLoginScreenState extends State<MetaMaskLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<MetaMaskAuthBloc, WalletState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is WalletErrorState) {
           hideDialog(dialogContext);
           ShowSnackBar.buildSnackbar(context, state.message, true);
@@ -31,7 +33,16 @@ class _MetaMaskLoginScreenState extends State<MetaMaskLoginScreen> {
           //received signature from metamask success
           hideDialog(dialogContext);
           ShowSnackBar.buildSnackbar(
-              context, AppConstants.authenticationSuccessful);
+            context,
+            AppConstants.authenticationSuccessful,
+          );
+          // ✅ Save login state
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setBool("isLoggedIn", true);
+
+          Future.microtask(() {
+            context.go('/reserve');
+          });
         }
       },
       child: Scaffold(
@@ -40,10 +51,12 @@ class _MetaMaskLoginScreenState extends State<MetaMaskLoginScreen> {
           child: Center(
             child: InkWell(
               onTap: () {
+                // 1. Show dialog trước
+                buildShowDialog(context);
+                // 2. Rồi mới bắn event
                 BlocProvider.of<MetaMaskAuthBloc>(context).add(
                   MetamaskAuthEvent(signatureFromBackend: signatureFromBackend),
                 );
-                buildShowDialog(context);
               },
               child: Card(
                 elevation: 2,
@@ -52,17 +65,15 @@ class _MetaMaskLoginScreenState extends State<MetaMaskLoginScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset(
-                        Assets.metamaskIcon,
-                        height: 40,
-                        width: 40,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      Image.asset(Assets.metamaskIcon, height: 60, width: 60),
+                      const SizedBox(height: 10),
                       const Text(
                         AppConstants.metamaskLogin,
-                      )
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -76,18 +87,18 @@ class _MetaMaskLoginScreenState extends State<MetaMaskLoginScreen> {
 
   buildShowDialog(BuildContext context) {
     return showDialog(
-        context: _scaffoldKey.currentContext ?? context,
-        barrierDismissible: true, //if user should not
-        //cancel this dialog then set as false
-        builder: (BuildContext dialogContextL) {
-          dialogContext = dialogContextL;
-          return BlocBuilder<MetaMaskAuthBloc, WalletState>(
-              builder: (context, state) {
-            return NSAlertDialog(
-              textWidget: getText(state),
-            );
-          });
-        });
+      context: _scaffoldKey.currentContext ?? context,
+      barrierDismissible: true, //if user should not
+      //cancel this dialog then set as false
+      builder: (BuildContext dialogContextL) {
+        dialogContext = dialogContextL;
+        return BlocBuilder<MetaMaskAuthBloc, WalletState>(
+          builder: (context, state) {
+            return NSAlertDialog(textWidget: getText(state));
+          },
+        );
+      },
+    );
   }
 
   getText(WalletState state) {

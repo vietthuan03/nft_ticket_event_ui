@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:nft_ticket_event_ui/features/home/models/ticket_model.dart';
 
 class TicketCard extends StatelessWidget {
-  final String title;
-  final String description;
-  final String location;
-  final String date;
-  final String imageUrl;
+  final TicketModel ticket;
   final bool showBuyButton;
 
   const TicketCard({
     super.key,
-    required this.title,
-    required this.description,
-    required this.location,
-    required this.date,
-    required this.imageUrl,
-    this.showBuyButton = false,
+    required this.ticket,
+    this.showBuyButton = true,
   });
 
   @override
@@ -45,26 +38,32 @@ class TicketCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Hình ảnh
+          // Image network (model dùng URL)
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: Image.asset(
-              imageUrl,
+            child: Image.network(
+              ticket.imageUrl,
               height: 180,
               width: double.infinity,
               fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(
+                height: 180,
+                color: Colors.grey.shade200,
+                alignment: Alignment.center,
+                child: const Icon(Icons.image_not_supported, size: 40),
+              ),
             ),
           ),
 
-          // Nội dung
+          // Content
           Padding(
             padding: const EdgeInsets.all(14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // PASS LABEL
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: colorScheme.primary,
                     borderRadius: BorderRadius.circular(6),
@@ -74,9 +73,10 @@ class TicketCard extends StatelessWidget {
                     style: TextStyle(color: Colors.white, fontSize: 10),
                   ),
                 ),
+
                 const SizedBox(height: 10),
                 Text(
-                  title,
+                  ticket.title,
                   style: theme.textTheme.titleLarge?.copyWith(
                     color: textColor,
                     fontWeight: FontWeight.bold,
@@ -84,28 +84,33 @@ class TicketCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  location,
+                  ticket.location,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: textColor.withOpacity(0.7),
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  description,
+                  ticket.description,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: textColor.withOpacity(0.7),
                   ),
                 ),
                 const SizedBox(height: 10),
+
+                // Footer row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Valid in $date",
+                      "Valid in ${ticket.date}",
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: textColor.withOpacity(0.6),
                       ),
                     ),
+
                     if (showBuyButton)
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -121,8 +126,7 @@ class TicketCard extends StatelessWidget {
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content:
-                                  Text("Ticket purchased successfully!"),
+                              content: Text("Ticket purchased successfully!"),
                             ),
                           );
                         },

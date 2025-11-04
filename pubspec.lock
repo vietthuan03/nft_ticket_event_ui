@@ -384,6 +384,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.2.0"
+  go_router:
+    dependency: "direct main"
+    description:
+      name: go_router
+      sha256: d8f590a69729f719177ea68eb1e598295e8dbc41bbc247fed78b2c8a25660d7c
+      url: "https://pub.dev"
+    source: hosted
+    version: "16.3.0"
   google_fonts:
     dependency: "direct main"
     description:
@@ -488,6 +496,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.6.2"
+  logging:
+    dependency: transitive
+    description:
+      name: logging
+      sha256: c8245ada5f1717ed44271ed1c26b8ce85ca3228fd2ffdb75468ab01979309d61
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.0"
   matcher:
     dependency: transitive
     description:
@@ -668,26 +684,26 @@ packages:
     dependency: transitive
     description:
       name: reown_core
-      sha256: "231a045ce00db54fdf90df0a3eb180ab325d871dfbcb631d7d0c0c26dd490ba4"
+      sha256: "8d5d14b4e8d008b09ec9db964ab8913b4fc17000d666eb1fece20a80a4b5e37a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.3"
+    version: "1.3.6"
   reown_sign:
     dependency: transitive
     description:
       name: reown_sign
-      sha256: "21b9e4e49498f35cd1b3a020b49f38c00b44cb7febc62f9b8df420f9686bdccf"
+      sha256: c2fec55ed3d0042d0802c80d7fc36f9b1937eac6ef9c2907dae3b8146188cffa
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.4"
+    version: "1.3.7"
   reown_walletkit:
     dependency: "direct main"
     description:
       name: reown_walletkit
-      sha256: "68a146b445eab2acddfb9da51683c05ce2256c23997d1e1fe43e113a708dec75"
+      sha256: f96cc9f6e264138b3411fd1635e06d437d5912d7a21ef28af21974e2680dfd70
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.5"
+    version: "1.3.7"
   sec:
     dependency: transitive
     description:
@@ -697,7 +713,7 @@ packages:
     source: hosted
     version: "1.1.0"
   shared_preferences:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shared_preferences
       sha256: "6e8bf70b7fef813df4e9a36f658ac46d107db4b4cfe1048b477d4e453a8159f5"

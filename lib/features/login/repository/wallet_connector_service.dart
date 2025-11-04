@@ -1,6 +1,6 @@
 import 'package:reown_walletkit/reown_walletkit.dart';
 
-abstract class WalletConnectorService {
+abstract class WalletConnectorRepo {
   ReownSignClient get wClient;
   Future<bool> initialize();
   Future<ConnectResponse?> connect();

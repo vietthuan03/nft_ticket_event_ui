@@ -1,4 +1,4 @@
-import '../../models/chain_metadata.dart';
+import 'models/chain_metadata.dart';
 
 class WalletConstants {
   static const mainChainMetaData = ChainMetadata(

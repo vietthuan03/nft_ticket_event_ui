@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nft_ticket_event_ui/features/login/service/connect_service.dart';
+import 'package:nft_ticket_event_ui/features/login/repository/connect_service.dart';
 import 'package:nft_ticket_event_ui/utils/constants/app_constants.dart';
 import 'package:reown_walletkit/reown_walletkit.dart';
 import 'wallet_envet.dart';
