@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nft_ticket_event_ui/features/login/repository/wallet_connector_service.dart';
+import 'package:get/get_navigation/src/snackbar/snackbar.dart';
+import 'package:nft_ticket_event_ui/features/login/repository/wallet_connector_repo.dart';
 import 'package:nft_ticket_event_ui/features/login/wallet_constants.dart';
 import 'package:nft_ticket_event_ui/features/login/models/chain_metadata.dart';
 import 'package:nft_ticket_event_ui/utils/helper/helper_functions.dart';
@@ -108,5 +109,69 @@ class MetamaskConnectorRepoImpl implements WalletConnectorRepo {
           message: coreError.message,
         )
     );
+  }
+
+  Future<void> handlePayWithMetaMask(BuildContext context) async {
+    try {
+      final initialized = await initialize();
+      if(!initialized) {
+        print("wallet init failed");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Failed to initialize Metamask"))
+        );
+        return;
+      }
+
+      final connectResponse = await connect();
+      if (connectResponse == null) {
+        print("Connect response null");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Metamask connection failed')),
+        );
+        return;
+      }
+      // Mở MetaMask app để xác thực (deep link)
+      await onDisplayUri(connectResponse.uri);
+      // Chờ user xác nhận kết nối
+      final session = await authorize(connectResponse, "Authorize login");
+      if (session == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("MetaMask authorization failed")),
+        );
+        return;
+      }
+      final walletAddress = session.namespaces[_chainMetadata.type]?.accounts.first.split(':').last;
+      final topic = session.topic;
+      print("✅ Connected wallet: $walletAddress");
+      // Chuẩn bị dữ liệu cần ký (transaction hoặc message)
+      const message = "Pay for NFT ticket order #12345";
+
+      // Gửi request ký message (sign)
+      final signature = await sendMessageForSigned(
+        connectResponse,
+        walletAddress!,
+        topic,
+        message,
+      );
+      if(signature == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("User rejected signature")),
+        );
+        return;
+      }
+      // Xử lý hậu ký (thanh toán)
+      // Ở đây bạn có thể gửi signature + walletAddress lên server để xác thực payment
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Payment successful!\nSig: ${signature.substring(0, 10)}...")),
+      );
+      // 8️⃣ Ngắt kết nối sau khi thanh toán xong
+      await disconnectWallet(topic: topic);
+      print("🔌 Disconnected from MetaMask");
+    } catch (e, st) {
+      print("⚠️ MetaMask payment error: $e\n$st");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Payment failed: $e")),
+      );
+    } 
   }
 }

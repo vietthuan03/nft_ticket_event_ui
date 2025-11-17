@@ -29,7 +29,7 @@ class ReserveView extends StatelessWidget {
               : const Color(0xFFF3F6FD),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () =>
-                context.read<ReserveBloc>().add(ToggleThemeEvent()),
+                context.read<ReserveBloc>().add(ReserveEvent.toggleTheme()),
             label: Text(isDark ? "Light Mode" : "Dark Mode"),
             icon: Icon(isDark ? Icons.wb_sunny : Icons.nightlight_round),
           ),

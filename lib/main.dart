@@ -23,7 +23,7 @@ class NFTTicketApp extends StatelessWidget {
         BlocProvider(
           create: (_) => ReserveBloc(
             TicketRepositoryImpl(), // ← inject repo vào bloc
-          )..add(LoadTicketEvent()), // ← event khởi tạo data
+          )..add(ReserveEvent.loadTicket()), // ← event khởi tạo data
         ),
       ],
       child: MaterialApp.router(

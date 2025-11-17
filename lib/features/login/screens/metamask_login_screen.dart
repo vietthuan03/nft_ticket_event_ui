@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:nft_ticket_event_ui/features/login/bloc/metamask_auth_bloc.dart';
-import 'package:nft_ticket_event_ui/features/login/bloc/wallet_envet.dart';
-import 'package:nft_ticket_event_ui/features/login/bloc/wallet_state.dart';
 import 'package:nft_ticket_event_ui/features/login/widgets/nsalert_dialog.dart';
 import 'package:nft_ticket_event_ui/features/login/widgets/other_custom_widgets.dart';
 import 'package:nft_ticket_event_ui/features/login/widgets/show_snack_bar.dart';

@@ -1,12 +1,7 @@
 part of 'reserve_bloc.dart';
 
-sealed class ReserveEvent extends Equatable {
-  const ReserveEvent();
-
-  @override
-  List<Object> get props => [];
+@freezed
+class ReserveEvent with _$ReserveEvent {
+  const factory ReserveEvent.loadTicket() = _LoadTicketEvent;
+  const factory ReserveEvent.toggleTheme() = _ToggleThemeEvent;
 }
-
-class LoadTicketEvent extends ReserveEvent {}
-
-class ToggleThemeEvent extends ReserveEvent {}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nft_ticket_event_ui/features/home/models/ticket_model.dart';
+import 'package:nft_ticket_event_ui/features/home/widgets/ticket_dialog.dart';
 
 class TicketCard extends StatelessWidget {
   final TicketModel ticket;
@@ -13,6 +14,7 @@ class TicketCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TicketDialog ticketDialog = TicketDialog();
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -28,11 +30,7 @@ class TicketCard extends StatelessWidget {
         color: bgColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(
-            color: shadowColor,
-            blurRadius: 10,
-            spreadRadius: 2,
-          ),
+          BoxShadow(color: shadowColor, blurRadius: 10, spreadRadius: 2),
         ],
       ),
       child: Column(
@@ -63,7 +61,10 @@ class TicketCard extends StatelessWidget {
               children: [
                 // PASS LABEL
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: colorScheme.primary,
                     borderRadius: BorderRadius.circular(6),
@@ -124,11 +125,7 @@ class TicketCard extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Ticket purchased successfully!"),
-                            ),
-                          );
+                          // ticketDialog.showBuyTicketDialog(context);
                         },
                         child: const Text(
                           "Buy",

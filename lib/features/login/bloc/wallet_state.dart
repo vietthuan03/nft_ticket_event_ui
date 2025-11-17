@@ -1,46 +1,46 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+part of 'metamask_auth_bloc.dart';
 
-@immutable
-abstract class WalletState extends Equatable {}
+@freezed
+class WalletState with _$WalletState {
+  const factory WalletState.initial() = WalletInitialState;
 
-class WalletInitialState extends WalletState {
-  @override
-  List<Object?> get props => [];
-}
+  const factory WalletState.initializing({
+    required String message,
+  }) = _WalletInitializingState;
 
-class WalletInitializedState extends WalletState {
-  final String message;
-  WalletInitializedState({required this.message});
-  @override
-  List<Object?> get props => [message];
-}
+  const factory WalletState.initialized({
+    required String message,
+  }) = _WalletInitializedState;
 
-class WalletAuthorizedState extends WalletState {
-  final String message;
-  WalletAuthorizedState({required this.message});
-  @override
-  List<Object?> get props => [message];
-}
+  const factory WalletState.authorized({
+    required String message,
+  }) = _WalletAuthorizedState;
 
-class WalletReceivedSignatureState extends WalletState {
-  final String message;
-  final String signatureFromWallet;
-  final String signatureFromBk;
-  final String walletAddress;
-  WalletReceivedSignatureState(
-      {required this.signatureFromWallet,
-      required this.signatureFromBk,
-      required this.walletAddress,
-      required this.message});
-  @override
-  List<Object?> get props =>
-      [signatureFromWallet, signatureFromBk, walletAddress, message];
-}
+  const factory WalletState.receivedSignature({
+    required String signatureFromWallet,
+    required String signatureFromBk,
+    required String walletAddress,
+    required String message,
+  }) = _WalletReceivedSignatureState;
 
-class WalletErrorState extends WalletState {
-  final String message;
-  WalletErrorState({required this.message});
-  @override
-  List<Object?> get props => [message];
+  const factory WalletState.paymentPending({
+    required String txHash,
+    String? message,
+  }) = _WalletPaymentPendingState;
+  
+  const factory WalletState.paymentSuccess({
+    required String txHash,
+    required String walletAddress,
+    required String amount,
+    String? receipt,
+    String? message,
+  }) = _WalletPaymentSuccessState;
+  
+  const factory WalletState.paymentFailed({
+    required String message,
+  }) = WalletPaymentFailedState;
+
+  const factory WalletState.error({
+    required String message,
+  }) = _WalletErrorState;
 }

@@ -12,4 +12,5 @@ class AppConstants {
       "Error to connecting the wallet, please try again letter";
   static const String metamaskLogin = "MetaMask Login";
   static const String authenticationSuccessful = "Authentication Successful!";
+  static const String connectResponse = "Can't wallet connect";
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nft_ticket_event_ui/features/login/repository/wallet_connector_service.dart';
+import 'package:nft_ticket_event_ui/features/login/repository/wallet_connector_repo.dart';
 import 'package:nft_ticket_event_ui/features/login/wallet_constants.dart';
 import 'package:nft_ticket_event_ui/features/login/models/chain_metadata.dart';
 import 'package:nft_ticket_event_ui/utils/helper/helper_functions.dart';
