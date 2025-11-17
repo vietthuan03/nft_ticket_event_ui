@@ -24,24 +24,24 @@ class _MetaMaskLoginScreenState extends State<MetaMaskLoginScreen> {
   Widget build(BuildContext context) {
     return BlocListener<MetaMaskAuthBloc, WalletState>(
       listener: (context, state) async {
-        if (state is WalletErrorState) {
-          hideDialog(dialogContext);
-          ShowSnackBar.buildSnackbar(context, state.message, true);
-        } else if (state is WalletReceivedSignatureState) {
-          //received signature from metamask success
-          hideDialog(dialogContext);
-          ShowSnackBar.buildSnackbar(
-            context,
-            AppConstants.authenticationSuccessful,
-          );
-          // ✅ Save login state
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setBool("isLoggedIn", true);
+        state.maybeWhen(
+          orElse: () {},
+          error: (message) {
+            hideDialog(dialogContext);
+            ShowSnackBar.buildSnackbar(context, message, true);
+          },
+          receivedSignature: (_, _, _, _) async {
+            if (dialogContext!.mounted) hideDialog(dialogContext);
+            ShowSnackBar.buildSnackbar(
+              context,
+              AppConstants.authenticationSuccessful,
+            );
 
-          Future.microtask(() {
-            context.go('/reserve');
-          });
-        }
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setBool("isLoggedIn", true);
+            if (context.mounted) context.go('/reserve');
+          },
+        );
       },
       child: Scaffold(
         key: _scaffoldKey,
@@ -50,10 +50,12 @@ class _MetaMaskLoginScreenState extends State<MetaMaskLoginScreen> {
             child: InkWell(
               onTap: () {
                 // 1. Show dialog trước
-                buildShowDialog(context);
+                if (dialogContext!.mounted) buildShowDialog(context);
                 // 2. Rồi mới bắn event
                 BlocProvider.of<MetaMaskAuthBloc>(context).add(
-                  MetamaskAuthEvent(signatureFromBackend: signatureFromBackend),
+                  WalletEvent.metamaskAuth(
+                    signatureFromBackend: signatureFromBackend,
+                  ),
                 );
               },
               child: Card(
@@ -100,17 +102,12 @@ class _MetaMaskLoginScreenState extends State<MetaMaskLoginScreen> {
   }
 
   getText(WalletState state) {
-    String message = "";
-    if (state is WalletInitializedState) {
-      //initialized metamask success
-      message = state.message;
-    } else if (state is WalletAuthorizedState) {
-      //received authorized approval success
-      message = state.message;
-    } else if (state is WalletReceivedSignatureState) {
-      //received signature from metamask success
-      message = state.message;
-    }
+    String message = state.maybeWhen(
+      orElse: () => "",
+      initializing: (message) => message,
+      authorized: (message) => message,
+      receivedSignature: (_, _, _, message) => message,
+    );
     return Text(
       message,
       style: const TextStyle(fontSize: 18, color: Colors.white),
