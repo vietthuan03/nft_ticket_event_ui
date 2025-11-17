@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/snackbar/snackbar.dart';
-import 'package:nft_ticket_event_ui/features/login/repository/wallet_connector_repo.dart';
+import 'package:nft_ticket_event_ui/features/login/repository/metamask_connector_repo.dart';
 import 'package:nft_ticket_event_ui/features/login/wallet_constants.dart';
 import 'package:nft_ticket_event_ui/features/login/models/chain_metadata.dart';
 import 'package:nft_ticket_event_ui/utils/helper/helper_functions.dart';
@@ -173,5 +173,72 @@ class MetamaskConnectorRepoImpl implements WalletConnectorRepo {
         SnackBar(content: Text("Payment failed: $e")),
       );
     } 
+  }
+  
+  @override
+  Future<Map<String, dynamic>?> getTransactionReceipt({
+    required String topic,
+    required String txHash,
+    String chainId = 'eip155:11155111',
+  }) async {
+    try {
+      debugPrint("🔍 Getting receipt for: $txHash");
+
+      final result = await wClient.request(
+        topic: topic,
+        chainId: chainId,
+        request: SessionRequestParams(
+          method: 'eth_getTransactionReceipt',
+          params: [txHash],
+        ),
+      );
+
+      debugPrint("📄 Receipt: $result");
+      return result as Map<String, dynamic>?;
+    } catch (e) {
+      debugPrint("❌ Get receipt error: $e");
+      return null;
+    }
+  }
+  
+  @override
+  Future<String?> sendTransaction({
+    required String topic,
+    required String fromAddress,
+    required String toAddress,
+    required String value,
+    String? data,
+    String chainId = 'eip155:11155111', // Default Sepolia testnet
+  }) async {
+    try {
+      debugPrint("🔵 Sending transaction on chain: $chainId");
+      debugPrint("From: $fromAddress");
+      debugPrint("To: $toAddress");
+      debugPrint("Value: $value Wei");
+
+      final transaction = {
+        'from': fromAddress,
+        'to': toAddress,
+        'value': '0x${BigInt.parse(value).toRadixString(16)}', // Convert to hex
+        'data': data ?? '0x',
+      };
+
+      debugPrint("Transaction params: $transaction");
+
+      final result = await wClient.request(
+        topic: topic,
+        chainId: chainId,
+        request: SessionRequestParams(
+          method: 'eth_sendTransaction',
+          params: [transaction],
+        ),
+      );
+
+      debugPrint("✅ Transaction result: $result");
+      return result.toString();
+    } catch (e) {
+      debugPrint("❌ Transaction error: $e");
+      return null;
+    }
   }
 }
