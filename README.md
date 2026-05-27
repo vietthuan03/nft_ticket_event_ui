@@ -68,13 +68,79 @@ Each ticket is a unique NFT minted on the blockchain — ensuring **transparency
 
 ### 📸 Screenshots
 
-| Home Screen | Event List | NFT Ticket Detail |
-|:---:|:---:|:---:|
-| ![Home](screenshots/home.png) | ![Events](screenshots/events.png) | ![Ticket](screenshots/ticket_detail.png) |
+<div align="center">
 
-| Connect MetaMask | Buy Ticket | 
-|:---:|:---:|:---:|
-| ![MetaMask](screenshots/metamask_connect.png) | ![Buy](screenshots/buy_ticket.png) | 
+<table>
+  <tr>
+    <td align="center">
+      <img src="screenshots/splash.jpg" width="180"/>
+      <br/>
+      <b>Splash Screen</b>
+    </td>
+    <td align="center">
+      <img src="screenshots/sign_in.png" width="180"/>
+      <br/>
+      <b>Sign In</b>
+    </td>
+    <td align="center">
+      <img src="screenshots/sign_up.png" width="180"/>
+      <br/>
+      <b>Sign Up</b>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="screenshots/home.png" width="180"/>
+      <br/>
+      <b>Home Light</b>
+    </td>
+    <td align="center">
+      <img src="screenshots/home_dark.jpg" width="180"/>
+      <br/>
+      <b>Home Dark</b>
+    </td>
+    <td align="center">
+      <img src="screenshots/event_detail.jpg" width="180"/>
+      <br/>
+      <b>Event Detail</b>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="screenshots/checkout_ticket.jpg" width="180"/>
+      <br/>
+      <b>Checkout Ticket</b>
+    </td>
+    <td align="center">
+      <img src="screenshots/checkout_dark.jpg" width="180"/>
+      <br/>
+      <b>Checkout Dark</b>
+    </td>
+    <td align="center">
+      <img src="screenshots/mint_ticket.jpg" width="180"/>
+      <br/>
+      <b>Mint NFT Ticket</b>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="screenshots/ticket_book.png" width="180"/>
+      <br/>
+      <b>Booked Ticket</b>
+    </td>
+    <td align="center">
+      <img src="screenshots/setting.png" width="180"/>
+      <br/>
+      <b>Settings</b>
+    </td>
+    <td></td>
+  </tr>
+</table>
+
+</div>
 
 ---
 
